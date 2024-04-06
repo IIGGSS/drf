@@ -16,9 +16,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from tutoring_center.views import TutorAPIView
+from tutoring_center.views import *
+from tutoring_center.yasg import urlpatterns as doc_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/tutorlist/', TutorAPIView.as_view())
+    path('api/v1/tutors/', TutorAPIList.as_view()),
+    path('api/v1/tutors/<uuid:pk>/', TutorAPIDetail.as_view()),
+    path('api/v1/students/', StudentAPIList.as_view()),
+    path('api/v1/students/<uuid:pk>/', StudentAPIDetail.as_view()),
+    path('api/v1/admins/', AdministratorAPIList.as_view()),
+    path('api/v1/admins/<uuid:pk>/', AdministratorAPIDetail.as_view()),
+    path('api/v1/subjects/', SubjectAPIList.as_view()),
+    path('api/v1/subjects/<uuid:pk>/', SubjectAPIDetail.as_view()),
+    path('api/v1/services/', ServiceAPIList.as_view()),
+    path('api/v1/services/<uuid:pk>/', ServiceAPIDetail.as_view()),
+	 path('api/v1/regs/', RegistrationForServiceAPIList.as_view()),
+    path('api/v1/regs/<uuid:pk>/', RegistrationForServiceAPIDetail.as_view()),
+    path('api/v1/homeworks/', HomeworkAPIList.as_view()),
+    path('api/v1/homeworks/<uuid:pk>/', HomeworkAPIDetail.as_view()),
+    path('api/v1/files/', FileAPIList.as_view()),
+    path('api/v1/files/<uuid:pk>/', FileAPIDetail.as_view()),
+    path('api/v1/news/', NewsAPIList.as_view()),
+    path('api/v1/news/<uuid:pk>/', NewsAPIDetail.as_view()),
 ]
+urlpatterns+=doc_urls

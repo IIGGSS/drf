@@ -1,20 +1,15 @@
 import enum
 from django.db import models
 import uuid
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
-
-# Create your models here.
-class level_of_education(enum.Enum):
-   preschooler = 'preschooler',
-   scholar = 'scholar',
-   student = 'student',
-   other = 'other',
-
-class status_of_registration(enum.Enum):
-   free = 'free'
-   busy = 'busy'
-   confirmed = 'confirmed'
-   completed = 'completed'
+class StatusOfRegistration(models.TextChoices):
+   FREE = 'FREE', 'Свободно'
+   BUSY = 'BUSY', 'Занято'
+   CONFIRMED = 'CONFIRMED', 'Подтверждено'
+   COMPLETED = 'COMPLETED', 'Завершено'
    
 class EducationLevelChoices(models.TextChoices):
     PRESCHOOLER = "PRESCHOOLER", "Дошкольники"
@@ -25,23 +20,27 @@ class EducationLevelChoices(models.TextChoices):
 
 class User(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    login =  models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+    login =  models.CharField(max_length=20,verbose_name="Логин")
+    password = models.CharField(max_length=20,verbose_name="Пароль")
     
     def __str__(self):
         return f"{self.login}"
+    
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 
 class Tutor(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    user = models.ForeignKey(to=User,related_name='User',on_delete=models.CASCADE,null=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    middle_name = models.CharField(max_length=20)
-    birthday = models.DateField()
-    email = models.CharField(max_length=30)
-    phone = models.CharField(max_length=15)
-    education = models.CharField(max_length=100)
+    user = models.ForeignKey(to=User,related_name='User',on_delete=models.CASCADE,null=True,verbose_name="Пользователь")
+    first_name = models.CharField(max_length=20,verbose_name="Имя")
+    last_name = models.CharField(max_length=20,verbose_name="Фамилия")
+    middle_name = models.CharField(max_length=20,verbose_name="Отчество")
+    birthday = models.DateField(verbose_name="Дата рождения")
+    email = models.CharField(max_length=30,verbose_name="Электронная почта")
+    phone = models.CharField(max_length=15,verbose_name="Номер телефона")
+    education = models.TextField(max_length=255,verbose_name="Образование")
     
     def full_name(self):
         return f"{self.last_name} {self.first_name} {self.middle_name}"
@@ -53,24 +52,56 @@ class Tutor(models.Model):
         verbose_name = 'Репетитор'
         verbose_name_plural = 'Репетиторы'
 
+@receiver(pre_save, sender=Tutor)
+def check_user_existence(sender, instance, **kwargs):
+    if not instance.user:
+        raise ValidationError('У Tutor должен быть указан связанный User.')
+
 
 class Student(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    user = models.ForeignKey('User',on_delete=models.CASCADE,null=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    middle_name = models.CharField(max_length=20)
-    birthday = models.DateField()
-    email = models.CharField(max_length=30)
-    phone = models.CharField(max_length=15)
-    grade = models.CharField(max_length=100)
-    parents_fio = models.CharField(max_length=50)
-    phone = models.CharField(max_length=15)
+    user = models.ForeignKey('User',on_delete=models.CASCADE,null=True,verbose_name="Пользователь")
+    first_name = models.CharField(max_length=20,verbose_name="Имя")
+    last_name = models.CharField(max_length=20,verbose_name="Фамилия")
+    middle_name = models.CharField(max_length=20,verbose_name="Отчество")
+    birthday = models.DateField(verbose_name="Дата рождения")
+    email = models.CharField(max_length=30,verbose_name="Электронная почта")
+    phone = models.CharField(max_length=15,verbose_name="Номер телефона")
+    grade = models.CharField(max_length=15, choices=EducationLevelChoices.choices, verbose_name="Уровень образования")
+    parent_fio = models.CharField(max_length=100,verbose_name="ФИО родителя", null=True)
+    parent_phone = models.CharField(max_length=15,verbose_name="Номер телефона родителя", null=True)
+    
+    def full_name(self):
+        return f"{self.last_name} {self.first_name} {self.middle_name}"
+
+    def __str__(self):
+        return f"{self.full_name()}"
+    
+    class Meta:
+        verbose_name = 'Ученик'
+        verbose_name_plural = 'Ученики'
+
+@receiver(pre_save, sender=Student)
+def check_user_existence(sender, instance, **kwargs):
+    if not instance.user:
+        raise ValidationError('У Student должен быть указан связанный User.')
 
 
 class Administrator(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    user = models.ForeignKey('User',on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey('User',on_delete=models.CASCADE,null=True,verbose_name="Пользователь")
+    
+    def __str__(self):
+        return f"{self.user.login}"
+     
+    class Meta:
+        verbose_name = 'Администратор'
+        verbose_name_plural = 'Администраторы'
+
+@receiver(pre_save, sender=Administrator)
+def check_user_existence(sender, instance, **kwargs):
+    if not instance.user:
+        raise ValidationError('У Administrator должен быть указан связанный User.')
 
 
 class Service(models.Model):
@@ -91,7 +122,7 @@ class Service(models.Model):
 
 class Subject(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, verbose_name="Название")
     
     def __str__(self):
         return f"{self.name}"
@@ -101,40 +132,68 @@ class Subject(models.Model):
         verbose_name_plural = 'Предметы'
 
 
-class Registration_for_service(models.Model):
+class RegistrationForService(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    tutor = models.ForeignKey('Tutor',on_delete=models.CASCADE,null=True)
-    student = models.ForeignKey('Student',on_delete=models.CASCADE,null=True)
-    service = models.ForeignKey('Service',on_delete=models.CASCADE,null=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    theme_of_lesson = models.CharField(max_length=30)
-    additional_info = models.CharField(max_length=30)
-    status = models.CharField(max_length=15, choices=[(tag.name, tag.value) for tag in status_of_registration])
+    tutor = models.ForeignKey('Tutor',on_delete=models.CASCADE,null=True, verbose_name="Репетитор")
+    student = models.ForeignKey('Student',on_delete=models.CASCADE,null=True, verbose_name="Ученик")
+    service = models.ForeignKey('Service',on_delete=models.CASCADE,null=True, verbose_name="Услуга")
+    start_date = models.DateTimeField(verbose_name="Дата начала")
+    end_date = models.DateTimeField(verbose_name="Дата конца")
+    theme_of_lesson = models.CharField(max_length=30, verbose_name="Тема урока")
+    additional_info = models.CharField(max_length=30, verbose_name="Дополнительная информация")
+    status = models.CharField(max_length=15, choices=StatusOfRegistration.choices,verbose_name="Статус")
+    
+    def __str__(self):
+        return f"{self.tutor.full_name()}, {self.student.full_name()}, {self.service.subject.name}"
+
+    class Meta:
+        verbose_name = 'Запись'
+        verbose_name_plural = 'Записи'
 
 
 class Homework(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    student = models.ForeignKey('Student',on_delete=models.CASCADE,null=True)
-    tutor = models.ForeignKey('Tutor',on_delete=models.CASCADE,null=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    theme = models.CharField(max_length=30)
-    description = models.CharField(max_length=30)
+    student = models.ForeignKey('Student',on_delete=models.CASCADE,null=True, verbose_name="Ученик")
+    tutor = models.ForeignKey('Tutor',on_delete=models.CASCADE,null=True, verbose_name="Репетитор")
+    start_date = models.DateTimeField(verbose_name="Дата начала")
+    end_date = models.DateTimeField(verbose_name="Дата конца")
+    theme = models.CharField(max_length=30, verbose_name="Тема")
+    description = models.CharField(max_length=30, verbose_name="Описание")
+    
+    def __str__(self):
+        return f"{self.tutor.full_name()}, {self.student.full_name()}, {self.theme}"
+
+    class Meta:
+        verbose_name = 'Домашнее задание'
+        verbose_name_plural = 'Домашние задания'
 
 
 class File(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    name = models.CharField(max_length=20)
-    file = models.FileField()
+    news = models.ForeignKey('News',on_delete=models.CASCADE,null=True, verbose_name="Новость")
+    name = models.CharField(max_length=20, verbose_name="Название")
+    file = models.FileField(verbose_name="Файл",upload_to="news/files/")
+    
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = 'Файл'
+        verbose_name_plural = 'Файлы'
 
 
 class News(models.Model):
     id = models.UUIDField(default=uuid.uuid4,editable=False,unique=True,primary_key=True)
-    title = models.CharField(max_length=30)
-    short_description = models.CharField(max_length=30)
-    description = models.CharField(max_length=100)
-    small_preview = models.ImageField()
-    preview = models.ImageField()
-    file = models.FileField(File)
+    title = models.CharField(max_length=30, verbose_name="Название")
+    short_description = models.CharField(max_length=30, verbose_name="Краткое описание")
+    description = models.TextField(verbose_name="Описание")
+    small_preview = models.ImageField(verbose_name="Малое превью", blank=True, null=True)
+    preview = models.ImageField(verbose_name="Превью", blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = 'Новость'
+        verbose_name_plural = 'Новости'
     
