@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from tutoring_center.views import *
 from tutoring_center.yasg import urlpatterns as doc_urls
+from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,5 +42,7 @@ urlpatterns = [
     path('api/v1/files/<uuid:pk>/', FileAPIDetail.as_view()),
     path('api/v1/news/', NewsAPIList.as_view()),
     path('api/v1/news/<uuid:pk>/', NewsAPIDetail.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
 urlpatterns+=doc_urls

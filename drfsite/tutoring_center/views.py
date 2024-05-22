@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
-
+from .forms import *
 
 class TutorAPIList(generics.ListCreateAPIView):
    queryset = Tutor.objects.all()
@@ -110,3 +110,29 @@ class NewsAPIList(generics.ListCreateAPIView):
 class NewsAPIDetail(generics.RetrieveUpdateDestroyAPIView):
    queryset = News.objects.all()
    serializer_class = NewsSerializer
+
+def register(request):
+	if request.method =='POST':
+		form = RegistrationForm(request.POST)
+		user_form = ProfiloUtenteForm(request.POST)
+		if form.is_valid() and profilo_utente_form.is_valid():
+
+			user = form.save()
+			profile = profilo_utente_form.save(commit=False)
+			profile.user = user
+
+			profile.save()
+			profilo_utente_form.save_m2m()
+
+			return redirect('/incarico_slice')
+		else:
+			args = {'form': form, 'profilo_utente_form': profilo_utente_form}
+			return render(request, 'accounts/register.html', args)
+	else:
+		form = RegistrationForm()
+
+		profilo_utente_form = ProfiloUtenteForm()
+
+
+	args = {'form': form, 'profilo_utente_form': profilo_utente_form}
+	return render(request, 'accounts/register.html', args)
