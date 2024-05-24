@@ -15,11 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from tutoring_center.views import *
-from tutoring_center.yasg import urlpatterns as doc_urls
-from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from tutors.views import *
+from students.views import *
+from administrators.views import *
+from subjects.views import *
+from services.views import *
+from registrations.views import *
+from homeworks.views import *
+from files.views import *
+from news.views import *
+from drfsite.yasg import urlpatterns as doc_urls
+from django.urls import path, include
 
 
 urlpatterns = [
@@ -42,7 +48,10 @@ urlpatterns = [
     path('api/v1/files/<uuid:pk>/', FileAPIDetail.as_view()),
     path('api/v1/news/', NewsAPIList.as_view()),
     path('api/v1/news/<uuid:pk>/', NewsAPIDetail.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+   # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+   # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken'))
+   
 ]
 urlpatterns+=doc_urls

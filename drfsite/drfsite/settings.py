@@ -30,9 +30,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTH_USER_MODEL = 'users.User'
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
@@ -47,10 +50,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tutoring_center.apps.TutoringCenterConfig',
+    'administrators.apps.AdministratorsConfig',
+    'users.apps.UsersConfig',
+    'students.apps.StudentsConfig',
+    'tutors.apps.TutorsConfig',
+    'services.apps.ServicesConfig',
+    'subjects.apps.SubjectsConfig',
+    'registrations.apps.RegistrationsConfig',
+    'homeworks.apps.HomeworksConfig',
+    'news.apps.NewsConfig',
+    'files.apps.FilesConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_yasg',
     'django_filters',
+    'djoser',
     'rest_framework_simplejwt'
 ]
 
@@ -131,7 +145,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+#STATICFILES_DIR = [
+#	os.path.join(BASE_DIR, "static")
+#]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
