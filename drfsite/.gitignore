@@ -85,4 +85,3 @@ docs/_build/
 /apps/backend/celerybeat-schedule
 /apps/backend/db
 .vscode
-

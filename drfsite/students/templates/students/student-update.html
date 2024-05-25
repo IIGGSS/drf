@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="" method="post" class="flex flex-col gap-4 p-2 m-2 border-1 shadow-xl bg-green-100 max-w-[400px]">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="p-2 border-1 bg-green-400 hover:bg-green-500">Обновить</button>
+    </form>
+{% endblock %}
