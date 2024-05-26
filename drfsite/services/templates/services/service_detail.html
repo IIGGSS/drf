@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="text-2xl">{{ object.tutor }}</h2>
+    <h3 class="text-xl">{{ object.subject }}</h3>
+    <p>{{ object.info_about_service }}</p>
+    <h2 class="text-2xl">
+        Слоты:
+    </h2>
+    <div class="flex flex-wrap gap-4 m-4">
+        {% for slot in object.free_slots.all %}
+            <div class="p-4 border-1 shadow-xl w-fit">
+                <p>
+                    Время: {{ slot.start_time }}
+                <hr>
+                Продолжительность: {{ slot.duration }}
+                </p>
+                <a href="{% url 'service-slot-sign-on' slot.pk %}" class="btn btn-outline-success">Записаться</a>
+            </div>
+        {% empty %}
+            На данный момент слотов нет
+        {% endfor %}
+    </div>
+    {% if request.user.is_authenticated and request.user.tutor %}
+        <form action="{% url 'service-slot-create' object.id %}" class="p-2 border-1 shadow-xl flex flex-col gap-2"
+              method="post">
+            <h3 class="text-xl">Создать слот</h3>
+            {% csrf_token %}
+            <div class="flex flex-wrap justify-between">
+                <label for="start_time" class="fw-bold">Время начала</label>
+                <input id="start_time" type="datetime-local" name="start_time">
+            </div>
+            <div class="flex flex-wrap justify-between">
+                <label for="duration" class="fw-bold">Продолжительность (минуты)</label>
+                <input id="duration" type="number" name="duration" placeholder="0">
+            </div>
+            <button type="submit" class="btn btn-success">Добавить</button>
+        </form>
+    {% endif %}
+
+{% endblock %}

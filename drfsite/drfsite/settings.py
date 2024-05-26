@@ -56,8 +56,6 @@ INSTALLED_APPS = [
     "tutors.apps.TutorsConfig",
     "services.apps.ServicesConfig",
     "subjects.apps.SubjectsConfig",
-    "registrations.apps.RegistrationsConfig",
-    "homeworks.apps.HomeworksConfig",
     "news.apps.NewsConfig",
     "files.apps.FilesConfig",
     "rest_framework",

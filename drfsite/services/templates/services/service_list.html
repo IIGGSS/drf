@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="flex flex-wrap gap-4">
+        {% for object in object_list %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ object.tutor }} - {{ object.subject }}</h5>
+                    <p class="card-text">{{ object.info_about_service }}</p>
+                    <a href="{% url 'service-detail' pk=object.id %}" class="btn btn-primary">Расписание ({{ object.free_slots.count }} свободных)</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

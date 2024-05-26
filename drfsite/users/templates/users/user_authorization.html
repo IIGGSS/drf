@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="flex justify-center items-center min-h-[100dvh]">
+        <form action="" method="post"
+              class="m-2 p-4 border-1 rounded-2 max-w-[400px] flex flex-col justify-center items-center gap-4">
+            {% csrf_token %}
+            <h2>Форма регистрации ученика</h2>
+            <input type="text" name="login" placeholder="Имя пользователя" class="form-control">
+            <input type="password" name="password" placeholder="Пароль" class="form-control">
+            <button class="btn btn-success" type="submit">Войти</button>
+            <p>Еще не зарегистрированы? <a href="{% url 'registration' %}">Присоединиться</a></p>
+        </form>
+    </div>
+{% endblock %}
