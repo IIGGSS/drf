@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from django.views.generic import TemplateView
 from rest_framework import generics
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -35,3 +36,19 @@ class UserRegistrationView(TemplateView):
             return redirect(reverse("students-profile"))
         print(form.errors)
         return super().get(request, *args, **kwargs)
+
+
+class UserLoginView(TemplateView):
+    template_name = "users/user_authorization.html"
+
+    def post(self, request, *args, **kwargs):
+        user = authenticate(
+            request, username=request.POST["login"], password=request.POST["password"]
+        )
+        if user is not None:
+            login(request, user)
+            return redirect(reverse("students-profile"))
+        messages.add_message(
+            request, messages.ERROR, message="Не правильный логин или пароль"
+        )
+        return redirect(reverse("users-login"))

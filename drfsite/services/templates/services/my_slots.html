@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="text-2xl">Ваши записи:</h2>
+    <div class="flex flex-wrap gap-4 m-4">
+        {% for object in object_list %}
+            <div class="p-4 border-1 shadow-xl w-fit">
+                <p>
+                    Время: {{ object.start_time }}
+                <hr>
+                Продолжительность: {{ object.duration }}
+                </p>
+                <a href="{% url 'service-detail' object.service_id %}" class="btn btn-outline-success">Подробнее об услуге</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

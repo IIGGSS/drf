@@ -47,7 +47,7 @@ class StudentUpdatePage(UpdateView):
     template_name = "students/student-update.html"
 
     def get_success_url(self):
-        return redirect(reverse("students-profile"))
+        return reverse("students-profile")
 
     def get_object(self, queryset=None):
         return self.request.user.student
