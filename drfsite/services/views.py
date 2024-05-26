@@ -4,12 +4,24 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, reverse
 from django.views.generic import ListView, CreateView, DetailView, View
 
+from subjects.models import Subject
 from .forms import ServiceCreateForm, ServiceSlotCreateForm
 from .models import Service, ServiceSlot
 
 
 class ServiceListView(ListView):
     queryset = Service.objects.all()
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_authenticated and hasattr(self.request.user, "tutor"):
+            return qs.filter(tutor=self.request.user.tutor)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["subjects"] = Subject.objects.all()
+        return data
 
 
 class ServiceCreateView(CreateView):
@@ -18,7 +30,7 @@ class ServiceCreateView(CreateView):
     template_name = "services/service_form.html"
 
     def get_success_url(self):
-        return redirect(reverse("service-list"))
+        return reverse("service-list")
 
 
 class ServiceDetailView(DetailView):

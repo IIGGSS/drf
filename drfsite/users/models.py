@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, login, password, **extra_fields):
         if not login:
@@ -26,12 +27,9 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_("Superuser must have is_superuser=True."))
         return self.create_user(login, password, **extra_fields)
 
+
 class User(AbstractUser):
-    login = models.CharField(
-        unique=True,
-        max_length=150,
-        verbose_name="Логин"
-    )
+    login = models.CharField(unique=True, max_length=150, verbose_name="Логин")
     username = None
     USERNAME_FIELD = "login"
     REQUIRED_FIELDS = []
@@ -45,4 +43,3 @@ class User(AbstractUser):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         ordering = ("-id",)
-

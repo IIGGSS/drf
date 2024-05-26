@@ -8,12 +8,19 @@ class CustomUserAdmin(UserAdmin):
     model = User
     list_display = [
         "login",
-        
     ]
     fieldsets = (
-        ("Логин", {"fields": (
-        "password", "login")}),
-        ("Права и разрешения", {"fields": ("is_staff", "is_active", "is_superuser",)}),
+        ("Логин", {"fields": ("password", "login")}),
+        (
+            "Права и разрешения",
+            {
+                "fields": (
+                    "is_staff",
+                    "is_active",
+                    "is_superuser",
+                )
+            },
+        ),
     )
     add_fieldsets = (
         (
@@ -21,11 +28,12 @@ class CustomUserAdmin(UserAdmin):
             {
                 "classes": ("wide",),
                 "fields": (
-                    "login","password1", "password2",
+                    "login",
+                    "password1",
+                    "password2",
                 ),
             },
         ),
-        
     )
     search_fields = ["login"]
     ordering = ["id"]
