@@ -17,9 +17,9 @@
                 <hr>
                 Продолжительность: {{ slot.duration }}
                 </p>
-                {% if request.user.is_authenticated and request.user.student %}
+                {% if request.user.is_authenticated and request.user.student and not slot.student %}
                     <a href="{% url 'service-slot-sign-on' slot.pk %}" class="btn btn-outline-success">Записаться</a>
-                {% else %}
+                {% elif  request.user.is_authenticated and request.user.tutor and slot.student %}
                     {% if slot.student %}
                         <a href="{% url 'students-view-profile' pk=slot.student.id %}" class="btn btn-outline-success">Посмотреть
                             профиль ученика</a>
