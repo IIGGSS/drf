@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, reverse
 from django.views.generic import ListView, CreateView, DetailView, View
 
+from students.models import EducationLevelChoices
 from subjects.models import Subject
 from .forms import ServiceCreateForm, ServiceSlotCreateForm
 from .models import Service, ServiceSlot
@@ -29,6 +30,18 @@ class ServiceCreateView(CreateView):
     form_class = ServiceCreateForm
     template_name = "services/service_form.html"
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["subjects"] = Subject.objects.all()
+        data["educations"] = EducationLevelChoices
+        return data
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.tutor = self.request.user.tutor
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
         return reverse("service-list")
 
@@ -36,6 +49,11 @@ class ServiceCreateView(CreateView):
 class ServiceDetailView(DetailView):
     queryset = Service.objects.all()
     template_name = "services/service_detail.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["form"] = ServiceSlotCreateForm()
+        return data
 
 
 class ServiceSlotCreateView(LoginRequiredMixin, CreateView):

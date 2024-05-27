@@ -1,9 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="" method="post">
+
+    <form class="max-w-sm mx-auto" action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Добавить</button>
+        <div class="my-2">
+            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Предмет</label>
+            <select name="subject" id="subject"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required>
+                {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="my-2">
+            <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Уровень
+                образования</label>
+            <select name="level" id="level"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required>
+                {% for value, name in educations.choices %}
+                    <option value="{{ value }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="my-2">
+            <label for="info_about_service"
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Описание</label>
+            <textarea name="info_about_service" id="info_about_service"
+                      placeholder="Описание"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required></textarea>
+        </div>
+        <div class="my-2">
+            <label for="price"
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Стоимость (Рублей)</label>
+            <input name="price" id="price"
+                   placeholder="2000"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   required/>
+        </div>
+        <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Создать
+        </button>
     </form>
+
 {% endblock %}
