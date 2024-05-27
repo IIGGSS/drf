@@ -22,6 +22,7 @@ class Tutor(models.Model):
     email = models.CharField(max_length=30, verbose_name="Электронная почта")
     phone = models.CharField(max_length=15, verbose_name="Номер телефона")
     education = models.TextField(max_length=255, verbose_name="Образование")
+    photo = models.ImageField(null=True, blank=True, upload_to="tutors/photos")
 
     def full_name(self):
         return f"{self.last_name} {self.first_name} {self.middle_name}"

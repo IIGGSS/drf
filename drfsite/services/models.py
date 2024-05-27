@@ -46,6 +46,8 @@ class ServiceSlot(models.Model):
         null=True,
         blank=True,
     )
+    is_approved = models.BooleanField(default=False)
+    is_done = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Слот услуги"

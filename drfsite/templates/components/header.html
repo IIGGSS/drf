@@ -18,18 +18,18 @@
         </ul>
 
         <div class="col-md-3 text-end flex gap-2">
-            {% if request.user.is_authenticated and request.user.student %}
-                <a href="{% url 'students-profile' %}" class="btn btn-outline-primary">Личный кабинет</a>
+            {% if request.user.is_authenticated %}
+                {% if request.user.student %}
+                    <a href="{% url 'students-profile' %}" class="btn btn-outline-primary">Личный кабинет</a>
+                {% endif %}
             {% else %}
                 <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Войти</a>
                 <a href="{% url 'registration' %}" class="btn btn-primary">Зарегистрироваться</a>
             {% endif %}
-            {% if request.user.is_authenticated %}
-                <form method="post" action={% url 'logout' %}>
+            <form method="post" action={% url 'logout' %}>
                 {% csrf_token %}
-                    <button class="btn btn-outline-danger" type="submit">Выйти</button>
-                </form>
-            {% endif %}
+                <button class="btn btn-outline-danger" type="submit">Выйти</button>
+            </form>
         </div>
     </header>
 </div>

@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView
 from rest_framework import generics
+
+from tutors.models import Tutor
 from .models import *
 from .serializers import *
 
@@ -19,3 +21,8 @@ class NewsAPIDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class IndexPageView(TemplateView):
     template_name = "news/index.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["tutors"] = Tutor.objects.all()
+        return data

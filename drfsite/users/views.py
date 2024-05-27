@@ -33,7 +33,7 @@ class UserRegistrationView(TemplateView):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(reverse("students-profile"))
+            return redirect(reverse("service-list"))
         print(form.errors)
         return super().get(request, *args, **kwargs)
 
@@ -47,8 +47,10 @@ class UserLoginView(TemplateView):
         )
         if user is not None:
             login(request, user)
+            if not hasattr(user, "student"):
+                return redirect(reverse("service-list"))
             return redirect(reverse("students-profile"))
         messages.add_message(
             request, messages.ERROR, message="Не правильный логин или пароль"
         )
-        return redirect(reverse("users-login"))
+        return redirect(reverse("login"))

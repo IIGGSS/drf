@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, reverse
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DetailView
 from rest_framework import generics
 
 from .forms import StudentUpdateForm
@@ -51,3 +51,8 @@ class StudentUpdatePage(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.student
+
+
+class StudentViewPage(DetailView):
+    queryset = Student.objects.all()
+    template_name = "students/student-view.html"
