@@ -26,3 +26,7 @@ class IndexPageView(TemplateView):
         data = super().get_context_data(**kwargs)
         data["tutors"] = Tutor.objects.all()
         return data
+
+
+class AboutPageView(TemplateView):
+    template_name = "news/about.html"

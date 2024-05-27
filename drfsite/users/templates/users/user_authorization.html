@@ -1,15 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="flex justify-center items-center min-h-[100dvh]">
+    <div class="flex justify-center items-center">
         <form action="" method="post"
-              class="m-2 p-4 border-1 rounded-2 max-w-[400px] flex flex-col justify-center items-center gap-4">
+              class="m-2 p-4 border-1 rounded-2 flex flex-col justify-center items-center gap-4">
             {% csrf_token %}
-            <h2>Форма регистрации ученика</h2>
-            <input type="text" name="login" placeholder="Имя пользователя" class="form-control">
-            <input type="password" name="password" placeholder="Пароль" class="form-control">
-            <button class="btn btn-success" type="submit">Войти</button>
-            <p>Еще не зарегистрированы? <a href="{% url 'registration' %}">Присоединиться</a></p>
+            <div class="my-2">
+                <label for="login"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Логин</label>
+                <input name="login" id="login"
+                       placeholder="username"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       required/>
+            </div>
+            <div class="my-2">
+                <label for="password"
+                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Пароль</label>
+                <input name="password" id="password"
+                       placeholder="****"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       required/>
+            </div>
+            <button type="submit"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Войти
+            </button>
+            <p>Еще не зарегистрированы? <a href="{% url 'registration' %}" class="text-blue-700">Присоединиться</a></p>
         </form>
     </div>
 {% endblock %}

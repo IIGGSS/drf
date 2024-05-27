@@ -6,8 +6,11 @@
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <img src="{{ object.tutor.photo.url }}"/>
-                    <h5 class="card-title">{{ object.tutor }} - {{ object.subject }}</h5>
-                    <p>{{ object.price }}</p>
+                    <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3">
+                        <span class="flex w-2.5 h-2.5 bg-blue-600 rounded-full me-1.5 flex-shrink-0"></span>{{ object.subject }}
+                    </span>
+                    <h5 class="card-title">{{ object.tutor }}</h5>
+                    <p>{{ object.price }} руб.</p>
                     <a href="{% url 'service-detail' pk=object.id %}" class="btn btn-primary">Расписание
                         ({{ object.free_slots.count }} свободных)</a>
                 </div>
