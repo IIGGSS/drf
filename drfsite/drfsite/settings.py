@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     # thirds
     "widget_tweaks",
     # project
-    "administrators.apps.AdministratorsConfig",
     "users.apps.UsersConfig",
     "students.apps.StudentsConfig",
     "tutors.apps.TutorsConfig",

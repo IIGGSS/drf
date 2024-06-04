@@ -49,15 +49,3 @@ class Student(models.Model):
     class Meta:
         verbose_name = "Ученик"
         verbose_name_plural = "Ученики"
-
-
-@receiver(pre_save, sender=Student)
-def check_user_existence(sender, instance, **kwargs):
-    if not instance.user:
-        raise ValidationError("У Student должен быть указан связанный User.")
-
-
-@receiver(post_save, sender=User)
-def create_user_student(sender, instance, created, **kwargs):
-    if created:
-        Student.objects.create(user=instance)

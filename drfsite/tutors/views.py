@@ -1,31 +1,17 @@
-from rest_framework import generics
-from .models import *
-from .serializers import *
+from django.shortcuts import reverse
+from django.views.generic import UpdateView
+
+from tutors.forms import TutorUpdateProfileForm
+from tutors.models import Tutor
 
 
-class TutorAPIList(generics.ListCreateAPIView):
+class TutorProfileUpdatePage(UpdateView):
     queryset = Tutor.objects.all()
-    serializer_class = TutorSerializer
-    filterset_fields = [
-        "first_name",
-        "last_name",
-        "middle_name",
-        "birthday",
-        "phone",
-        "email",
-        "education",
-    ]
-    ordering_fields = [
-        "first_name",
-        "last_name",
-        "middle_name",
-        "birthday",
-        "phone",
-        "email",
-        "education",
-    ]
+    form_class = TutorUpdateProfileForm
+    template_name = "tutors/tutor_profile.html"
 
+    def get_object(self, queryset=None):
+        return self.request.user.tutor
 
-class TutorAPIDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Tutor.objects.all()
-    serializer_class = TutorSerializer
+    def get_success_url(self):
+        return reverse("tutor-profile")
