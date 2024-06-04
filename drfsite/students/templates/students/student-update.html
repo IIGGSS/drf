@@ -3,8 +3,7 @@
 {% block content %}
     <form action="" method="post"
           class="max-w-[400px] shadow-xl p-4 m-2 border border-gray-300 rounded-lg">
-        <input type="hidden" name="csrfmiddlewaretoken"
-               value="JbbwwY8VQSZd4LmjoYy76emDg8ZuuA1jm0SVcZWjZyc9qVq1g1ZiVSj636B3DRoA">
+        {% csrf_token %}
 
         <div class="my-2">
             <label for="id_first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Имя</label>

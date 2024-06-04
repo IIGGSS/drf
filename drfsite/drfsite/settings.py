@@ -32,16 +32,6 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "users.User"
 
-REST_FRAMEWORK = {
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-}
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -51,12 +41,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # thirds
-    "rest_framework",
-    "rest_framework.authtoken",
-    "drf_yasg",
-    "django_filters",
-    "djoser",
-    "rest_framework_simplejwt",
     "widget_tweaks",
     # project
     "administrators.apps.AdministratorsConfig",
