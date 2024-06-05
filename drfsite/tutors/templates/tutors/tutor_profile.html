@@ -1,5 +1,3 @@
-
-
 {% extends 'base.html' %} {% block content %}
 <form
   action=""
@@ -33,7 +31,7 @@
       >Фамилия</label
     >
     <input
-      value="{{ request.user.student.last_name }}"
+      value="{{ request.user.tutor.last_name }}"
       type="text"
       name="last_name"
       maxlength="20"
@@ -51,7 +49,7 @@
       >Отчество</label
     >
     <input
-      value="{{ request.user.student.middle_name }}"
+      value="{{ request.user.tutor.middle_name }}"
       type="text"
       name="middle_name"
       maxlength="20"
@@ -69,7 +67,7 @@
       >Дата рождения</label
     >
     <input
-      value="{{ request.user.student.birthday|date:'Y-m-d' }}"
+      value="{{ request.user.tutor.birthday|date:'Y-m-d' }}"
       type="date"
       name="birthday"
       id="id_birthday"
@@ -85,7 +83,7 @@
       >Электронная почта</label
     >
     <input
-      value="{{ request.user.student.email }}"
+      value="{{ request.user.tutor.email }}"
       type="email"
       name="email"
       maxlength="30"
@@ -103,7 +101,7 @@
       >Номер телефона</label
     >
     <input
-      value="{{ request.user.student.phone }}"
+      value="{{ request.user.tutor.phone }}"
       type="text"
       name="phone"
       maxlength="15"
@@ -116,54 +114,18 @@
 
   <div class="my-2">
     <label
-      for="id_grade"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >Уровень образования</label
-    >
-    <select
-      name="grade"
-      id="id_grade"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-    >
-      <option value="PRESCHOOLER">Дошкольники</option>
-      <option value="SCHOLAR">Школьники</option>
-      <option value="STUDENT">Студенты</option>
-      <option value="OTHER" selected="">Другие</option>
-    </select>
-  </div>
-
-  <div class="my-2">
-    <label
-      for="id_parent_fio"
+      for="id_education"
       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >ФИО родителя</label
     >
     <input
-      value="{{ request.user.student.parent_fio }}"
+      value="{{ request.user.tutor.education }}"
       type="text"
-      name="parent_fio"
+      name="education"
       maxlength="100"
       required=""
-      id="id_parent_fio"
-      placeholder="Введите ФИО родителя"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-    />
-  </div>
-
-  <div class="my-2">
-    <label
-      for="id_parent_phone"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >Номер телефона родителя</label
-    >
-    <input
-      value="{{ request.user.student.parent_phone }}"
-      type="text"
-      name="parent_phone"
-      maxlength="15"
-      required=""
-      id="id_parent_phone"
-      placeholder="Введите номер телефона родителя"
+      id="id_education"
+      placeholder="Образование"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     />
   </div>

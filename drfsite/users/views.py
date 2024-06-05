@@ -1,28 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, reverse
 from django.views.generic import TemplateView
-from rest_framework import generics
-from django.contrib.auth import login, authenticate
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from students.models import Student
 
-from .forms import UserRegistrationForm
-from .models import *
-from .serializers import *
-
-
-# Create your views here.
-
-
-class UserAPIVList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    filterset_fields = ["login"]
-
-
-class UserAPIDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from users.forms import UserRegistrationForm
 
 
 class UserRegistrationView(TemplateView):
@@ -32,6 +14,7 @@ class UserRegistrationView(TemplateView):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            Student.objects.create(user=user)
             login(request, user)
             return redirect(reverse("service-list"))
         print(form.errors)

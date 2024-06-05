@@ -21,6 +21,8 @@
             {% if request.user.is_authenticated %}
                 {% if request.user.student %}
                     <a href="{% url 'students-profile' %}" class="btn btn-outline-primary">Личный кабинет</a>
+                {% elif request.user.tutor %}
+                    <a href="{% url 'tutor-profile' %}" class="btn btn-outline-primary">Личный кабинет</a>
                 {% endif %}
                 <form method="post" action={% url 'logout' %}>
                     {% csrf_token %}
